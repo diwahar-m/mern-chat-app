@@ -120,21 +120,21 @@ const createGroupChat = asyncHandler(async(req, res)=>{
 
 const renameGroup = asyncHandler(async(req, res)=>{
     const {chatId, chatName} = req.body; 
+    
+        const upadatedChat =await  Chat.findByIdAndUpdate(
+            chatId,
+            {chatName: chatName},
+            {new: true}
+        )
+        .populate('users','-password')
+        .populate('groupAdmin','-password')
 
-    const upadatedChat = Chat.findByIdAndUpdate(
-        chatId,
-        {chatName},
-        {new: true}
-    )
-    .populate('users','-password')
-    .populate('groupAdmin','-password')
-
-    if(!upadatedChat){
-        res.status(404);
-        throw new Error('Chat Not Found');
-    }else{
-        res.json(upadatedChat)
-    }
+        if(!upadatedChat){
+            res.status(404);
+            throw new Error('Chat Not Found');
+        }else{
+            res.json(upadatedChat)
+        }
 
 })
 
@@ -171,11 +171,11 @@ const removeFromGroup = asyncHandler(async(req, res)=>{
     .populate('users','-password')
     .populate('groupAdmin','-password')
 
-    if(!added){
+    if(!removed){
         res.status(404)
         throw new Error('Chat Not Found');
     }else{
-        res.json(added);
+        res.json(removed);
     }
 })
 
